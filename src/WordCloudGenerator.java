@@ -62,34 +62,60 @@ public class WordCloudGenerator {
 			// Not going to happen because the file is already checked
 			e1.printStackTrace();
 		}
-        
+System.out.println("ignore dictionary size " +ignoreDictionary.size());        
         
         // Process the input file line by line
         // Note: the code below just prints out the words contained in each
         // line.  You will need to replace that code with code to generate
         // the dictionary of KeyWords.
-        DictionaryADT<String> inDictionary = new BSTDictionary<String>(); 
+        DictionaryADT<KeyWord> inDictionary = new BSTDictionary<KeyWord>();
         try {
 			in = new Scanner(inputFile);
 			while (in.hasNext()) {
             String line = in.nextLine();
-            List<String> words = parseLine(line);
-            
+            List<String> words = parseLine(line);           
             for (String word : words) {
-            	if (ignoreDictionary.lookup(word) != null) {
+            	if (ignoreDictionary.lookup(word) == null) {
+            		KeyWord newKeyWord = new KeyWord(word);
             		try {
-							inDictionary.insert(word);
+							inDictionary.insert(newKeyWord);
 						} catch (DuplicateException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+							newKeyWord.increment();
 						}
             	}
-            }
-                
-        } // end while
-			
+            }      
+        }
+
 		} catch (FileNotFoundException e) {
 			// Not going to happen
+			e.printStackTrace();
+		}
+System.out.println("inDictionary size: " + inDictionary.size());	
+
+        System.out.println("# keys: " + inDictionary.size());
+        System.out.println("avg path length: " + inDictionary.totalPathLength()/(float)inDictionary.size());
+        System.out.println("linear avg path: " + (inDictionary.size() + 1) / 2.0);
+        
+        ArrayHeap<KeyWord> newHeap = new ArrayHeap<>();
+        Iterator<KeyWord> itr = inDictionary.iterator();
+        while(itr.hasNext()) {
+      	  newHeap.insert(itr.next());
+        }
+        
+        for(int i = 0; i < Integer.parseInt(args[3]); i++) {
+      	  try {
+      		  if(!newHeap.isEmpty()){
+      			  dictionary.insert(newHeap.removeMax());
+      		  }
+			} catch (DuplicateException e) {
+				e.printStackTrace();
+			}
+        }
+        
+        try {
+			out = new PrintStream(args[1]);
+			generateHtml(dictionary, out);
+		} catch (FileNotFoundException e) {
 			e.printStackTrace();
 		}
         

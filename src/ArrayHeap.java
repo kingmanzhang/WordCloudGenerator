@@ -42,6 +42,9 @@ public class ArrayHeap<E extends Prioritizable> implements PriorityQueueADT<E> {
 
     public void insert(E item) {
    	 numItems++;
+   	 if(numItems == newArray.length) {
+   		 newArray = expand(newArray);
+   	 }
    	 newArray[numItems] = item;
    	 int k = numItems;
    	 while(k > 1) {
@@ -51,6 +54,16 @@ public class ArrayHeap<E extends Prioritizable> implements PriorityQueueADT<E> {
    		 }
    		 k = k / 2;
    	 }
+    }
+    
+    private E[] expand(E[] oriArray) {
+   	 int largerSize = 2 * oriArray.length;
+   	 newArray = (E[])(new Prioritizable[largerSize]);
+   	 for (int i = 1; i < oriArray.length; i++) {
+   		 newArray[i] = oriArray[i];
+   	 }
+   	 return newArray;
+   	 
     }
 
     public E removeMax() {
