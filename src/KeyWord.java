@@ -1,5 +1,5 @@
 
-public class KeyWord implements Prioritizable {
+public class KeyWord implements Prioritizable, Comparable<KeyWord> {
 	
 	private String word;
 	private int occurence;
@@ -14,18 +14,13 @@ public class KeyWord implements Prioritizable {
 		
 	}
 	
-	public int compareTo(KeyWord other) {
-		
-		return word.compareTo(other.getWord());
-		
-	}
 	
 	@Override
 	public boolean equals(Object other) {
 		
-		if (other instanceof KeyWord) {
+		if (other != null && other instanceof KeyWord) {
 			KeyWord newKeyWord = (KeyWord) other;
-			return this.word.equals(newKeyWord.getWord());
+			return word.equals(newKeyWord.getWord());
 		}
 		return false;
 		
@@ -37,6 +32,7 @@ public class KeyWord implements Prioritizable {
 		
 	}
 	
+	@Override
 	public int getPriority() {
 		
 		return occurence;
@@ -53,6 +49,19 @@ public class KeyWord implements Prioritizable {
 		
 		occurence++;
 		
+	}
+
+	@Override
+	public int compareTo(KeyWord other) {
+		
+		return word.compareTo(other.getWord());
+		
+	}
+	
+	@Override
+	public String toString() {
+		return this.getWord() + " Occurence " + this.getOccurrences() + 
+				" Priority " + this.getPriority();
 	}
 
 }

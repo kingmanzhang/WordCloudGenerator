@@ -46,10 +46,10 @@ public class ArrayHeap<E extends Prioritizable> implements PriorityQueueADT<E> {
    	 int k = numItems;
    	 while(k > 1) {
    		 if (item.getPriority() > newArray[k / 2].getPriority()) {
-   			newArray[numItems] = newArray[k/2];
+   			newArray[k] = newArray[k/2];
    			newArray[k/2] = item;
-   			k = k / 2;
    		 }
+   		 k = k / 2;
    	 }
     }
 
@@ -58,10 +58,9 @@ public class ArrayHeap<E extends Prioritizable> implements PriorityQueueADT<E> {
    		 throw new NoSuchElementException();
    	 }
    	 E max = newArray[1];
-   	 
    	 newArray[1] = newArray[numItems];
    	 int k = 1;
-   	 while(k < numItems) {
+   	 while(2 * k < numItems) {
    		 if(newArray[k].getPriority() < newArray[2*k].getPriority()
    				 || newArray[k].getPriority() < newArray[2*k+1].getPriority()) {
    			 E largerChild;
@@ -75,6 +74,7 @@ public class ArrayHeap<E extends Prioritizable> implements PriorityQueueADT<E> {
    				 newArray[k] = largerChild;
    			 }
    		 }
+   		 k = k * 2;
    	 }
    	 numItems--;
        return max;

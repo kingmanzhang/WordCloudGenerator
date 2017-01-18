@@ -29,23 +29,30 @@ public class BSTDictionaryIterator<K> implements Iterator<K> {
 			newStack.push(root);
 			root = root.getLeft();
 		}
-		newStack.push(root.getLeft());	
+		newStack.push(root);	
 	}
 
     public boolean hasNext() {
    	 
-        return newStack == null;  
+        return !newStack.isEmpty();  
     }
 
     public K next() {
    	 BSTnode<K> topNode = newStack.peek();
+   	 BSTnode<K> toPop = null;
    	 if(topNode.getRight() != null) {
+   		 topNode = topNode.getRight();
+   		 toPop = newStack.pop();
    		 while(topNode.getLeft() != null) {
    			 newStack.push(topNode);
+   			 topNode = topNode.getLeft();
    		 }
-   		 newStack.push(topNode.getLeft());
+   		 newStack.push(topNode);
+   		 return toPop.getKey();
+   	 } else {
+   		 return newStack.pop().getKey(); 
    	 }
-        return newStack.pop().getKey();  
+         
     }
 
     public void remove() {

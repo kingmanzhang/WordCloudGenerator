@@ -3,11 +3,13 @@ import java.util.Iterator;
 public class BSTDictionary<K extends Comparable<K>> implements DictionaryADT<K> {
     private BSTnode<K> root;  // the root node
     private int numItems;     // the number of items in the dictionary
+    
 
     
     public BSTDictionary() {
    	 this.root = null;
    	 this.numItems = 0;
+   	 
     }
     
     public void insert(K key) throws DuplicateException {
@@ -17,7 +19,7 @@ public class BSTDictionary<K extends Comparable<K>> implements DictionaryADT<K> 
     
     private BSTnode<K> insert(BSTnode<K> n, K key) throws DuplicateException {
    	 if (n == null) {
-   		 return new BSTnode<K>(key, null, null);
+   		 return new BSTnode<K>(key);
    	 }
    	 
    	 if (n.getKey().equals(key)) {
@@ -35,11 +37,11 @@ public class BSTDictionary<K extends Comparable<K>> implements DictionaryADT<K> 
 
     public boolean delete(K key) {
 
-       root = delete(root, key); 
-       
        if(lookup(key) == null) {
       	 return false;
        } else {
+      	 root = delete(root, key); 
+      	 numItems--;
       	 return true;
        }
     }
@@ -118,24 +120,18 @@ public class BSTDictionary<K extends Comparable<K>> implements DictionaryADT<K> 
     }
     
     public int totalPathLength() {
-   	 Iterator<K> itr = this.iterator();
-   	 int total = 0;
-   	 while(itr.hasNext()) {
-   		 total += totalPathLength(new BSTnode<K>(itr.next()));
-   	 }
-        return total;  
+   	 
+        return totalPathLength(root, 1);  
     }
     
-    private int totalPathLength(BSTnode<K> n) {
-   	 int depth = 0;
+    private int totalPathLength(BSTnode<K> n, int depth) {
    	 if (n == null) {
    		 return 0;
    	 }
    	 if (n.getLeft() == null && n.getRight() == null) {
    		 return depth;
    	 } else {
-   		 depth++;
-   		 return depth + totalPathLength(n.getLeft()) + totalPathLength(n.getRight());
+   		 return depth + totalPathLength(n.getLeft(), depth + 1) + totalPathLength(n.getRight(), depth + 1);
    	 }
     }
     
