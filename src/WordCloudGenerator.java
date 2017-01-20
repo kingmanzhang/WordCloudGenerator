@@ -81,7 +81,6 @@ public class WordCloudGenerator {
 			while (inIgnore.hasNext()) {
             try {
             	KeyWord newKeyWord = new KeyWord(inIgnore.next().toLowerCase());
-            	newKeyWord.increment();
                ignoreDictionary.insert(newKeyWord);
             } catch (DuplicateException e) {
                 // if there is a duplicate, we'll just ignore it
@@ -107,7 +106,6 @@ public class WordCloudGenerator {
             	if (ignoreDictionary.lookup(newKeyWord) == null) {
             		
             		try {
-            			newKeyWord.increment();
 							inDictionary.insert(newKeyWord);
 						} catch (DuplicateException e) {
 							inDictionary.lookup(newKeyWord).increment();

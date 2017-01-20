@@ -35,7 +35,7 @@ public class KeyWord implements Prioritizable, Comparable<KeyWord> {
 			throw new IllegalArgumentException();
 		}
 		this.word = word.toLowerCase();
-		occurrence = 0;
+		occurrence = 1; //a key word occurs once when instantiated
 		
 	}
 	
