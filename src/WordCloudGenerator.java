@@ -86,11 +86,11 @@ public class WordCloudGenerator {
             } catch (DuplicateException e) {
                 // if there is a duplicate, we'll just ignore it
             }
-        }
-		} catch (FileNotFoundException e1) {
-			// Not going to happen because the file is already checked
-			e1.printStackTrace();
-		}
+			}
+			} catch (FileNotFoundException e1) {
+				// Not going to happen because the file is already checked
+				e1.printStackTrace();
+			}
         
         // Process the input file line by line
         // Note: the code below just prints out the words contained in each
@@ -114,54 +114,49 @@ public class WordCloudGenerator {
 						}
             	}
             }      
-        }
+			}
 
-		} catch (FileNotFoundException e) {
-			// Not going to happen
-			e.printStackTrace();
-		}
+			} catch (FileNotFoundException e) {
+				// Not going to happen
+				e.printStackTrace();
+			}
 
+        //print the BST of keywords from the input file
         System.out.println("# keys: " + inDictionary.size());
-        System.out.println("avg path length: " + inDictionary.totalPathLength()/(float)inDictionary.size());
-        System.out.println("linear avg path: " + (inDictionary.size() + 1) / 2.0);
+        System.out.printf("avg path length: %.1f\n", 
+        inDictionary.totalPathLength()/(float)inDictionary.size());
+        System.out.println("linear avg path: " + 
+        (inDictionary.size() + 1) / 2.0);
         
+        //create a priority queue and put all keyword of input file to the 
+        //queue
         ArrayHeap<KeyWord> newHeap = new ArrayHeap<>();
         Iterator<KeyWord> itr = inDictionary.iterator();
         while(itr.hasNext()) {
       	  newHeap.insert(itr.next());
         }
         
+        //Use the priority queue to create a list of KeyWords of 
+        //the appropriate length
         for(int i = 0; i < Integer.parseInt(args[3]); i++) {
       	  try {
       		  if(!newHeap.isEmpty()){
       			  dictionary.insert(newHeap.removeMax());
       		  }
-			} catch (DuplicateException e) {
-				e.printStackTrace();
-			}
+				} catch (DuplicateException e) {
+					e.printStackTrace();
+				}
         }
         
+        //Generate the html output file
         try {
 			out = new PrintStream(args[1]);
 			generateHtml(dictionary, out);
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		}
-        
-
-        
-        ////////////////////////////////////////////////////////////
-        // ADD YOUR CODE HERE TO
-        // - Print out the information about the dictionary:
-        //     - # of keys
-        //     - average path length
-        //     - linear average path length
-        // - Put the dictionary into a priority queue
-        // - Use the priority queue to create a list of KeyWords of 
-        //   the appropriate length
-        // - Generate the html output file
-        ////////////////////////////////////////////////////////////
-	  		}
+		  } catch (FileNotFoundException e) {
+				e.printStackTrace();
+		  }
+    
+	  	  }
 
         // Close everything
         if (in != null) 
