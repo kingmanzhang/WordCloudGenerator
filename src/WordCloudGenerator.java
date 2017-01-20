@@ -1,3 +1,31 @@
+///////////////////////////////////////////////////////////////////////////////
+//                   ALL STUDENTS COMPLETE THESE SECTIONS
+// Title:            CS367 Assignment 3
+// Files:            ArrayHeap.java, BSTDictionary.java, 
+//							BSTDictionaryIterator.java, BSTnode.java, 
+//							DictionaryADT.java, DuplicateException.java, KeyWord.java
+//							Prioritizable.java, PriorityQueueADT.java, 
+//							TestClassWordCloud.java
+// Semester:         
+//
+// Author:           Xingmin Zhang 
+// Email:            xzhang66@wisc.edu
+// CS Login:         
+// Lecturer's Name:  
+// Lab Section:      
+//
+//////////////////// STUDENTS WHO GET HELP FROM OTHER THAN THEIR PARTNER //////
+//                   must fully acknowledge and credit those sources of help.
+//                   Instructors and TAs do not have to be credited here,
+//                   but tutors, roommates, relatives, strangers, etc do.
+//
+// Persons:          None
+//
+// Online sources:   None
+//////////////////////////// 80 columns wide //////////////////////////////////
+
+
+
 import java.util.*;
 import java.io.*;
 
@@ -47,13 +75,14 @@ public class WordCloudGenerator {
 	  		
 
         // Create the dictionary of words to ignore
-        // You do not need to change this code.
-        DictionaryADT<String> ignoreDictionary = new BSTDictionary<String>();
+        DictionaryADT<KeyWord> ignoreDictionary = new BSTDictionary<KeyWord>();
         try {
 			inIgnore = new Scanner(ignoreFile);
 			while (inIgnore.hasNext()) {
             try {
-                ignoreDictionary.insert(inIgnore.next().toLowerCase());
+            	KeyWord newKeyWord = new KeyWord(inIgnore.next().toLowerCase());
+            	newKeyWord.increment();
+               ignoreDictionary.insert(newKeyWord);
             } catch (DuplicateException e) {
                 // if there is a duplicate, we'll just ignore it
             }
@@ -62,7 +91,6 @@ public class WordCloudGenerator {
 			// Not going to happen because the file is already checked
 			e1.printStackTrace();
 		}
-System.out.println("ignore dictionary size " +ignoreDictionary.size());        
         
         // Process the input file line by line
         // Note: the code below just prints out the words contained in each
@@ -75,12 +103,14 @@ System.out.println("ignore dictionary size " +ignoreDictionary.size());
             String line = in.nextLine();
             List<String> words = parseLine(line);           
             for (String word : words) {
-            	if (ignoreDictionary.lookup(word) == null) {
-            		KeyWord newKeyWord = new KeyWord(word);
+            	KeyWord newKeyWord = new KeyWord(word);
+            	if (ignoreDictionary.lookup(newKeyWord) == null) {
+            		
             		try {
+            			newKeyWord.increment();
 							inDictionary.insert(newKeyWord);
 						} catch (DuplicateException e) {
-							newKeyWord.increment();
+							inDictionary.lookup(newKeyWord).increment();
 						}
             	}
             }      
@@ -90,7 +120,6 @@ System.out.println("ignore dictionary size " +ignoreDictionary.size());
 			// Not going to happen
 			e.printStackTrace();
 		}
-System.out.println("inDictionary size: " + inDictionary.size());	
 
         System.out.println("# keys: " + inDictionary.size());
         System.out.println("avg path length: " + inDictionary.totalPathLength()/(float)inDictionary.size());
@@ -281,7 +310,11 @@ System.out.println("inDictionary size: " + inDictionary.size());
         out.println("</p></body>\n</html>");
     }
     
-    
+    /**
+     * A helper method to determine whether a string contains only digits.
+     * @param str: a string to check
+     * @return true if all characters of the string are digits
+     */
     private static boolean digit(String str) {
  		for (int i = 0; i < str.length(); i++) {
  			if (!Character.isDigit(str.charAt(i))) {
